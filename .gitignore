@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Django
+backend/db.sqlite3
+backend/staticfiles/
+backend/media/
+
+# Environment files
+.env
+backend/.env
+*.env
+
+# Tooling caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE/editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
+# Spec files
+backend_execution_plan.md
+no_code_builder_backend_spec_django_drf.md
