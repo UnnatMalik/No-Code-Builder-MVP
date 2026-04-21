@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login, isLoading } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     setError('');
 
-    try {
-      await login({ username, password });
+    if (username.trim() === 'admin' && password === 'admin123') {
       navigate('/dashboard');
-    } catch (err) {
-      setError(err?.payload?.detail || 'Invalid username or password.');
+    } else {
+      setError('Invalid username or password. (Hint: admin / admin123)');
     }
   };
 
@@ -74,10 +71,9 @@ const Login = () => {
 
             <button
               type="submit"
-              disabled={isLoading}
               className="w-full bg-gradient-to-r from-primary to-secondary text-on-primary py-4 rounded-xl font-bold text-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-transform"
             >
-              {isLoading ? 'Signing In...' : 'Sign In to Workspace'}
+              Sign In to Workspace
             </button>
           </form>
 

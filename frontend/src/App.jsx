@@ -13,6 +13,9 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Signup from './pages/Signup';
 import MyProjects from './pages/MyProjects';
+import Templates from './pages/Templates';
+import PublishedSites from './pages/PublishedSites';
+import Settings from './pages/Settings';
 
 function LandingPage() {
   return (
@@ -38,6 +41,9 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/projects" element={<MyProjects />} />
+        <Route path="/templates" element={<Templates />} />
+        <Route path="/published" element={<PublishedSites />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </div>
   );
