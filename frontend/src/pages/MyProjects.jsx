@@ -2,8 +2,75 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 
+const projectsData = [
+  {
+    id: 1,
+    name: "E-Commerce Redesign 2024",
+    date: "Jan 15, 2024",
+    status: "Published",
+    statusColor: "emerald-500",
+    pages: "5",
+    components: "12",
+    edited: "Edited 2 hours ago",
+    modifiedTimeStamp: new Date(Date.now() - 2 * 60 * 60 * 1000).getTime(), // 2 hours ago
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDdsPuiOKr-6t7wG6Nv-ca-EQSTKb6wfwEGwRulGkgtsRo0IgFV8t4u2UYXZ8HH4hq1p1XbD7cRUD4Y892I8Ye2c5wX5ElAcUR6LnvoEEJFIHrkJNwn8ZSbzsMFrGhs2_0xp2oQgU64OJjO-IO7HblNWJDEOJUky7FZBVQ0_m7geOcuN-DexGKKOl9tb4sVLFinREvm6hmzAUFk7TuwC0DmAQKnuwlZP5RWpRTF1JNkty-KQRnZ3Bzr7eyNjJXQ_GbBnFVEbOKvVP0",
+    liked: true,
+    imageAlt: "clean minimalist SaaS dashboard design layout with vibrant blue accents on a desktop screen"
+  },
+  {
+    id: 2,
+    name: "Marketing Landing Page",
+    date: "Feb 02, 2024",
+    status: "Draft",
+    statusColor: "amber-500",
+    pages: "1",
+    components: "8",
+    edited: "Edited 5 mins ago",
+    modifiedTimeStamp: new Date(Date.now() - 5 * 60 * 1000).getTime(), // 5 mins ago
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBZtbeEfI_mEayitEb2asb5IRqsPbuVhgTgKj8j2FCfJLVg_TUaNw9bGQK1wV4-PABjtEODU0Z5O6y_7y0gWZJ4fGrwoTZQO0fdhx1M54XDvR7SF2Tm3m-pZSSiJFO5nOlVmVEe94J6cfbTGhByIaIJSEN-b7zmCCdX5xvGU1iTUTOldzuJ200u4ofNk2muQlD7Ee_gZNrZpXDjNLepTWx63Qn54AOVuMMJgqb2OOabrOA8cd89-hpVvyFut6LwA0sqjseDYUSOvAA",
+    liked: false,
+    imageAlt: "professional analytics dashboard with colorful data visualizations and clean white layout"
+  },
+  {
+    id: 3,
+    name: "Portfolio 2.0",
+    date: "Dec 12, 2023",
+    status: "Published",
+    statusColor: "indigo-600",
+    pages: "3",
+    components: "24",
+    edited: "Edited yesterday",
+    modifiedTimeStamp: new Date(Date.now() - 24 * 60 * 60 * 1000).getTime(), // yesterday
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDNvckNWmuPXSbpmK8PouqL-yisuqqcnv91R9Nb7Gfo0lgTjkCIpbsQgSYMhllEJbDfU9PX9Iw48c2S_ESemEaKuw-mmDNxo3dTKu9LGD0Z8RWGQKWawftHlisN104U7jldxp2eR9Rj-Y62LkqRXSA-09M3FqrrTEzATwIHPfYJuaFUZAdg2lbdjDWxPFsclyBbhYd5sbaRyTzNSJuXQ3biRwszcEU3g5z88mCLBeHk-GaBGGk1uOD1wi57xTRmmA7y5Ij4ct8eyqw",
+    liked: true,
+    imageAlt: "vibrant portfolio website design for a creative agency with bold typography and high-end imagery"
+  }
+];
+
 const MyProjects = () => {
   const navigate = useNavigate();
+  const [viewMode, setViewMode] = React.useState('grid');
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [statusFilter, setStatusFilter] = React.useState('All Status');
+  const [sortBy, setSortBy] = React.useState('Last Modified');
+
+  const filteredAndSortedProjects = React.useMemo(() => {
+    return projectsData
+      .filter(project => {
+        const matchesSearch = project.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesStatus = statusFilter === 'All Status' || project.status === statusFilter;
+        return matchesSearch && matchesStatus;
+      })
+      .sort((a, b) => {
+        if (sortBy === 'Name') {
+          return a.name.localeCompare(b.name);
+        } else if (sortBy === 'Creation Date') {
+          return new Date(b.date) - new Date(a.date);
+        } else {
+          return b.modifiedTimeStamp - a.modifiedTimeStamp;
+        }
+      });
+  }, [searchQuery, statusFilter, sortBy]);
 
   const handleLogout = () => {
     navigate('/login');
@@ -84,9 +151,9 @@ const MyProjects = () => {
               <div className="flex items-center gap-3 flex-1 min-w-[300px]">
                 <div className="relative flex-1">
                   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                  <input className="w-full pl-10 pr-4 py-2.5 bg-surface-container-lowest rounded-xl border-none text-sm focus:ring-2 focus:ring-primary-container" placeholder="Search projects..." type="text" />
+                  <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-10 pr-4 py-2.5 bg-surface-container-lowest rounded-xl border-none text-sm focus:ring-2 focus:ring-primary-container" placeholder="Search projects..." type="text" />
                 </div>
-                <select className="bg-surface-container-lowest border-none rounded-xl text-sm py-2.5 px-4 pr-10 font-semibold focus:ring-2 focus:ring-primary-container">
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="bg-surface-container-lowest border-none rounded-xl text-sm py-2.5 px-4 pr-10 font-semibold focus:ring-2 focus:ring-primary-container">
                   <option>All Status</option>
                   <option>Published</option>
                   <option>Draft</option>
@@ -96,17 +163,17 @@ const MyProjects = () => {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
                   <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Sort:</span>
-                  <select className="bg-transparent border-none text-sm py-1 font-bold focus:ring-0 cursor-pointer">
+                  <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="bg-transparent border-none text-sm py-1 font-bold focus:ring-0 cursor-pointer">
                     <option>Last Modified</option>
                     <option>Name</option>
                     <option>Creation Date</option>
                   </select>
                 </div>
                 <div className="flex bg-surface-container-high p-1 rounded-lg">
-                  <button className="p-1.5 bg-surface-container-lowest rounded-md shadow-sm text-primary">
+                  <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-md shadow-sm transition-colors ${viewMode === 'grid' ? 'bg-surface-container-lowest text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}>
                     <span className="material-symbols-outlined">grid_view</span>
                   </button>
-                  <button className="p-1.5 text-on-surface-variant hover:text-on-surface">
+                  <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-md transition-colors ${viewMode === 'list' ? 'bg-surface-container-lowest text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}>
                     <span className="material-symbols-outlined">list</span>
                   </button>
                 </div>
@@ -117,142 +184,68 @@ const MyProjects = () => {
               </div>
             </div>
 
-            {/* Project Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* Card 1 */}
-              <div className="group relative bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 flex flex-col">
-                <div className="relative h-48 overflow-hidden bg-slate-100">
-                  <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="clean minimalist SaaS dashboard design layout with vibrant blue accents on a desktop screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdsPuiOKr-6t7wG6Nv-ca-EQSTKb6wfwEGwRulGkgtsRo0IgFV8t4u2UYXZ8HH4hq1p1XbD7cRUD4Y892I8Ye2c5wX5ElAcUR6LnvoEEJFIHrkJNwn8ZSbzsMFrGhs2_0xp2oQgU64OJjO-IO7HblNWJDEOJUky7FZBVQ0_m7geOcuN-DexGKKOl9tb4sVLFinREvm6hmzAUFk7TuwC0DmAQKnuwlZP5RWpRTF1JNkty-KQRnZ3Bzr7eyNjJXQ_GbBnFVEbOKvVP0" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                    <div className="flex gap-2">
-                      <button className="p-2 bg-white/90 backdrop-blur rounded-full text-indigo-600 hover:bg-white text-sm">
-                        <span className="material-symbols-outlined text-lg">visibility</span>
-                      </button>
-                      <button className="p-2 bg-white/90 backdrop-blur rounded-full text-indigo-600 hover:bg-white text-sm">
-                        <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>favorite</span>
-                      </button>
+            {/* Project Grid / List */}
+            <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" : "flex flex-col gap-4"}>
+              {filteredAndSortedProjects.map(project => (
+                <div key={project.id} className={`group relative bg-surface-container-lowest overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 flex ${viewMode === 'grid' ? 'rounded-3xl flex-col' : 'rounded-2xl flex-col sm:flex-row items-center border border-slate-100'}`}>
+                  <div className={`relative overflow-hidden bg-slate-100 ${viewMode === 'grid' ? 'h-48' : 'w-full sm:w-64 h-48 sm:h-32 shrink-0'}`}>
+                    <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt={project.imageAlt} src={project.image} />
+                    {viewMode === 'grid' && (
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <div className="flex gap-2">
+                          <button className="p-2 bg-white/90 backdrop-blur rounded-full text-indigo-600 hover:bg-white text-sm">
+                            <span className="material-symbols-outlined text-lg">visibility</span>
+                          </button>
+                          <button className={`p-2 bg-white/90 backdrop-blur rounded-full text-sm ${project.liked ? 'text-indigo-600 hover:bg-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-white'}`}>
+                            <span className="material-symbols-outlined text-lg" style={project.liked ? { fontVariationSettings: "'FILL' 1" } : {}}>favorite</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    <div className="absolute top-4 right-4">
+                      <span className={`bg-${project.statusColor} text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider`}>{project.status}</span>
                     </div>
                   </div>
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">Published</span>
+                  <div className={`p-6 flex-1 flex ${viewMode === 'grid' ? 'flex-col' : 'flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4 sm:gap-6'}`}>
+                    <div className={viewMode === 'grid' ? "w-full" : "flex-1"}>
+                      <div className={`flex items-start justify-between ${viewMode === 'grid' ? 'mb-4' : ''}`}>
+                        <div>
+                          <h3 className="text-lg font-bold font-headline text-on-surface leading-tight hover:text-indigo-600 cursor-pointer transition-colors">{project.name}</h3>
+                          <p className="text-xs text-on-surface-variant font-medium mt-1">Created {project.date}</p>
+                        </div>
+                        {viewMode === 'grid' && (
+                          <button className="p-1 hover:bg-surface-container rounded-lg text-slate-400">
+                            <span className="material-symbols-outlined">more_vert</span>
+                          </button>
+                        )}
+                      </div>
+                      
+                      <div className={`flex items-center gap-6 ${viewMode === 'grid' ? 'mb-6' : 'mt-4 sm:mt-2'}`}>
+                        <div className="flex items-center gap-2">
+                          <span className="material-symbols-outlined text-indigo-400 text-lg">description</span>
+                          <span className="text-xs font-bold text-on-surface">{project.pages} Pages</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="material-symbols-outlined text-indigo-400 text-lg">extension</span>
+                          <span className="text-xs font-bold text-on-surface">{project.components} Components</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className={`${viewMode === 'grid' ? 'mt-auto flex items-center justify-between' : 'flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center w-full sm:w-auto h-full space-y-0 sm:space-y-4 pt-4 sm:pt-0 border-t sm:border-t-0 border-slate-100'}`}>
+                      <span className="text-[10px] font-bold text-on-surface-variant bg-surface-container-low px-2 py-1 rounded">{project.edited}</span>
+                      <div className="flex items-center gap-2">
+                         <button className="px-5 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-full text-xs font-bold hover:shadow-lg hover:shadow-indigo-200 transition-all">Edit Project</button>
+                         {viewMode === 'list' && (
+                            <button className="p-2 hover:bg-surface-container rounded-lg text-slate-400">
+                              <span className="material-symbols-outlined">more_vert</span>
+                            </button>
+                         )}
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-bold font-headline text-on-surface leading-tight hover:text-indigo-600 cursor-pointer transition-colors">E-Commerce Redesign 2024</h3>
-                      <p className="text-xs text-on-surface-variant font-medium mt-1">Created Jan 15, 2024</p>
-                    </div>
-                    <button className="p-1 hover:bg-surface-container rounded-lg text-slate-400">
-                      <span className="material-symbols-outlined">more_vert</span>
-                    </button>
-                  </div>
-                  <div className="flex items-center gap-6 mb-6">
-                    <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-indigo-400 text-lg">description</span>
-                      <span className="text-xs font-bold text-on-surface">5 Pages</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-indigo-400 text-lg">extension</span>
-                      <span className="text-xs font-bold text-on-surface">12 Components</span>
-                    </div>
-                  </div>
-                  <div className="mt-auto flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-on-surface-variant bg-surface-container-low px-2 py-1 rounded">Edited 2 hours ago</span>
-                    <button className="px-5 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-full text-xs font-bold hover:shadow-lg hover:shadow-indigo-200 transition-all">Edit Project</button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 2 */}
-              <div className="group relative bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 flex flex-col">
-                <div className="relative h-48 overflow-hidden bg-slate-100">
-                  <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="professional analytics dashboard with colorful data visualizations and clean white layout" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZtbeEfI_mEayitEb2asb5IRqsPbuVhgTgKj8j2FCfJLVg_TUaNw9bGQK1wV4-PABjtEODU0Z5O6y_7y0gWZJ4fGrwoTZQO0fdhx1M54XDvR7SF2Tm3m-pZSSiJFO5nOlVmVEe94J6cfbTGhByIaIJSEN-b7zmCCdX5xvGU1iTUTOldzuJ200u4ofNk2muQlD7Ee_gZNrZpXDjNLepTWx63Qn54AOVuMMJgqb2OOabrOA8cd89-hpVvyFut6LwA0sqjseDYUSOvAA" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                    <div className="flex gap-2">
-                      <button className="p-2 bg-white/90 backdrop-blur rounded-full text-indigo-600 hover:bg-white text-sm">
-                        <span className="material-symbols-outlined text-lg">visibility</span>
-                      </button>
-                      <button className="p-2 bg-white/90 backdrop-blur rounded-full text-slate-400 hover:text-indigo-600 hover:bg-white text-sm">
-                        <span className="material-symbols-outlined text-lg">favorite</span>
-                      </button>
-                    </div>
-                  </div>
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">Draft</span>
-                  </div>
-                </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-bold font-headline text-on-surface leading-tight hover:text-indigo-600 cursor-pointer transition-colors">Marketing Landing Page</h3>
-                      <p className="text-xs text-on-surface-variant font-medium mt-1">Created Feb 02, 2024</p>
-                    </div>
-                    <button className="p-1 hover:bg-surface-container rounded-lg text-slate-400">
-                      <span className="material-symbols-outlined">more_vert</span>
-                    </button>
-                  </div>
-                  <div className="flex items-center gap-6 mb-6">
-                    <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-indigo-400 text-lg">description</span>
-                      <span className="text-xs font-bold text-on-surface">1 Page</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-indigo-400 text-lg">extension</span>
-                      <span className="text-xs font-bold text-on-surface">8 Components</span>
-                    </div>
-                  </div>
-                  <div className="mt-auto flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-on-surface-variant bg-surface-container-low px-2 py-1 rounded">Edited 5 mins ago</span>
-                    <button className="px-5 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-full text-xs font-bold hover:shadow-lg hover:shadow-indigo-200 transition-all">Edit Project</button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 3 */}
-              <div className="group relative bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 flex flex-col">
-                <div className="relative h-48 overflow-hidden bg-slate-100">
-                  <img className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="vibrant portfolio website design for a creative agency with bold typography and high-end imagery" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNvckNWmuPXSbpmK8PouqL-yisuqqcnv91R9Nb7Gfo0lgTjkCIpbsQgSYMhllEJbDfU9PX9Iw48c2S_ESemEaKuw-mmDNxo3dTKu9LGD0Z8RWGQKWawftHlisN104U7jldxp2eR9Rj-Y62LkqRXSA-09M3FqrrTEzATwIHPfYJuaFUZAdg2lbdjDWxPFsclyBbhYd5sbaRyTzNSJuXQ3biRwszcEU3g5z88mCLBeHk-GaBGGk1uOD1wi57xTRmmA7y5Ij4ct8eyqw" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                    <div className="flex gap-2">
-                      <button className="p-2 bg-white/90 backdrop-blur rounded-full text-indigo-600 hover:bg-white text-sm">
-                        <span className="material-symbols-outlined text-lg">visibility</span>
-                      </button>
-                      <button className="p-2 bg-white/90 backdrop-blur rounded-full text-indigo-600 hover:bg-white text-sm">
-                        <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>favorite</span>
-                      </button>
-                    </div>
-                  </div>
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-indigo-600 text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">Published</span>
-                  </div>
-                </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-bold font-headline text-on-surface leading-tight hover:text-indigo-600 cursor-pointer transition-colors">Portfolio 2.0</h3>
-                      <p className="text-xs text-on-surface-variant font-medium mt-1">Created Dec 12, 2023</p>
-                    </div>
-                    <button className="p-1 hover:bg-surface-container rounded-lg text-slate-400">
-                      <span className="material-symbols-outlined">more_vert</span>
-                    </button>
-                  </div>
-                  <div className="flex items-center gap-6 mb-6">
-                    <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-indigo-400 text-lg">description</span>
-                      <span className="text-xs font-bold text-on-surface">3 Pages</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="material-symbols-outlined text-indigo-400 text-lg">extension</span>
-                      <span className="text-xs font-bold text-on-surface">24 Components</span>
-                    </div>
-                  </div>
-                  <div className="mt-auto flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-on-surface-variant bg-surface-container-low px-2 py-1 rounded">Edited yesterday</span>
-                    <button className="px-5 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-full text-xs font-bold hover:shadow-lg hover:shadow-indigo-200 transition-all">Edit Project</button>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
             
             {/* Pagination */}
