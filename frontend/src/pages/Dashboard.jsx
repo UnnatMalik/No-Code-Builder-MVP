@@ -1,6 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -32,26 +31,26 @@ const Dashboard = () => {
         {/* Nav Items */}
         <nav className="space-y-1 mb-auto">
           {/* Dashboard Active */}
-          <a className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm rounded-lg font-['Plus_Jakarta_Sans'] text-sm font-medium transition-transform duration-200 hover:translate-x-1" href="#">
+          <Link className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm rounded-lg font-['Plus_Jakarta_Sans'] text-sm font-medium transition-transform duration-200 hover:translate-x-1" to="/dashboard">
             <span className="material-symbols-outlined">dashboard</span>
             <span>Dashboard</span>
-          </a>
-          <a className="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-transform duration-200 hover:translate-x-1" href="#">
+          </Link>
+          <Link className="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-transform duration-200 hover:translate-x-1" to="/projects">
             <span className="material-symbols-outlined">folder</span>
             <span>My Projects</span>
-          </a>
-          <a className="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-transform duration-200 hover:translate-x-1" href="#">
+          </Link>
+          <Link className="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-transform duration-200 hover:translate-x-1" to="#">
             <span className="material-symbols-outlined">auto_awesome_motion</span>
             <span>Templates</span>
-          </a>
-          <a className="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-transform duration-200 hover:translate-x-1" href="#">
+          </Link>
+          <Link className="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-transform duration-200 hover:translate-x-1" to="#">
             <span className="material-symbols-outlined">public</span>
             <span>Published Sites</span>
-          </a>
-          <a className="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-transform duration-200 hover:translate-x-1" href="#">
+          </Link>
+          <Link className="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-transform duration-200 hover:translate-x-1" to="#">
             <span className="material-symbols-outlined">settings</span>
             <span>Settings</span>
-          </a>
+          </Link>
         </nav>
         {/* CTA */}
         <div className="mt-4 space-y-2">
@@ -65,7 +64,7 @@ const Dashboard = () => {
           </button>
         </div>
       </aside>
-      
+
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col md:pl-64 overflow-hidden h-full">
         {/* TopAppBar Component */}
@@ -179,7 +178,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="group bg-surface-container-lowest rounded-2xl overflow-hidden border border-slate-100 hover:shadow-xl transition-all">
                     <div className="relative h-48 bg-slate-100 overflow-hidden">
                       <img alt="Project thumbnail" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC03opMvEez2D1xGGuVfLPvTgVK1t0arhfmtunFWLeryRYW0lTO40g7_LfRyxTj7IHshhzdh8VOqfnK_djxq-NP6UXJbFY-fYrhYLGhjEhw9pCBcn8mkSNb5IdRr9QHNg6ngosP_iP8TArQ9cS0MMkLPRGfHeetKyv1xZgKQXGaKlhALZhvNzoX9O0K-XQnJjOYE3PHt6n90UFMnr3J1vr7RR3vz9O805OqaLN4M3JexkwnggnADYj4RjcMN7YFXbhMgHXRpdytTls" />

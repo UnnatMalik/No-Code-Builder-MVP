@@ -11,7 +11,8 @@ import FloatingToolbar from './components/FloatingToolbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import ProtectedRoute from './components/ProtectedRoute';
+import Signup from './pages/Signup';
+import MyProjects from './pages/MyProjects';
 
 function LandingPage() {
   return (
@@ -34,15 +35,9 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/dashboard"
-          element={(
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          )}
-        />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/projects" element={<MyProjects />} />
       </Routes>
     </div>
   );
