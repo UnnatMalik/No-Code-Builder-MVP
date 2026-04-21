@@ -20,8 +20,8 @@ const Dashboard = () => {
         <header className="h-16 flex justify-between items-center w-full px-6 bg-surface/80 backdrop-blur-[20px] z-40 sticky top-0 shadow-sm">
           <div className="flex items-center gap-4 flex-1">
             <div className="relative w-full max-w-md">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
-              <input className="w-full pl-10 pr-4 py-2 bg-slate-100/50 dark:bg-slate-800/50 border-none rounded-full text-sm font-body focus:ring-2 focus:ring-primary-container transition-all" placeholder="Search for projects..." type="text" />
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg z-10 pointer-events-none">search</span>
+              <input className="w-full pl-10 pr-4 py-2 bg-slate-100 hover:bg-slate-200/50 border border-transparent focus:border-indigo-500/30 rounded-full text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all shadow-inner" placeholder="Search for projects..." type="text" />
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -99,10 +99,10 @@ const Dashboard = () => {
               <section>
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-bold text-on-surface">Recent Projects</h3>
-                  <a className="text-sm font-bold text-primary hover:underline underline-offset-4 flex items-center gap-1" href="#">
+                  <Link className="text-sm font-bold text-primary hover:underline underline-offset-4 flex items-center gap-1" to="/projects">
                     View All
                     <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                  </a>
+                  </Link>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="group bg-surface-container-lowest rounded-2xl overflow-hidden border border-slate-100 hover:shadow-xl transition-all">
@@ -172,55 +172,60 @@ const Dashboard = () => {
             </div>
 
             {/* Right Action Panel */}
-            <aside className="w-full lg:w-80 space-y-8">
+            <aside className="w-full lg:w-80 space-y-12">
 
 
               {/* Activity Feed */}
-              <section className="space-y-6">
-                <div className="flex items-center justify-between">
+              <section className="space-y-8">
+                <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-on-surface-variant uppercase tracking-widest">Recent Activity</h3>
                   <button className="text-xs font-bold text-primary">Clear all</button>
                 </div>
-                <div className="relative space-y-6 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-surface-container">
+                <div className="relative space-y-10 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-surface-container pt-2">
                   <div className="relative pl-8">
                     <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-container flex items-center justify-center ring-4 ring-surface z-10">
                       <span className="material-symbols-outlined text-[14px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>cloud_upload</span>
                     </div>
                     <p className="text-sm text-on-surface font-semibold">Published Portfolio v2</p>
-                    <p className="text-xs text-on-surface-variant">12 minutes ago</p>
+                    <p className="text-xs text-on-surface-variant mt-1">12 minutes ago</p>
                   </div>
                   <div className="relative pl-8">
                     <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-secondary-container flex items-center justify-center ring-4 ring-surface z-10">
                       <span className="material-symbols-outlined text-[14px] text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>edit_note</span>
                     </div>
                     <p className="text-sm text-on-surface font-semibold">Edited Home page</p>
-                    <p className="text-xs text-on-surface-variant">1 hour ago</p>
+                    <p className="text-xs text-on-surface-variant mt-1">1 hour ago</p>
                   </div>
                   <div className="relative pl-8">
                     <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center ring-4 ring-surface z-10">
                       <span className="material-symbols-outlined text-[14px] text-on-surface-variant" style={{ fontVariationSettings: "'FILL' 1" }}>person_add</span>
                     </div>
                     <p className="text-sm text-on-surface font-semibold">New collaborator added</p>
-                    <p className="text-xs text-on-surface-variant">4 hours ago</p>
+                    <p className="text-xs text-on-surface-variant mt-1">4 hours ago</p>
                   </div>
                   <div className="relative pl-8">
                     <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-tertiary-container flex items-center justify-center ring-4 ring-surface z-10">
                       <span className="material-symbols-outlined text-[14px] text-tertiary" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                     </div>
                     <p className="text-sm text-on-surface font-semibold">Project 'SaaS Landing' favorited</p>
-                    <p className="text-xs text-on-surface-variant">Yesterday</p>
+                    <p className="text-xs text-on-surface-variant mt-1">Yesterday</p>
                   </div>
                 </div>
               </section>
 
               {/* Upgrade Promo */}
-              <section className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 text-white overflow-hidden relative group">
-                <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-700">
-                  <span className="material-symbols-outlined !text-9xl">workspace_premium</span>
+              <section className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-10 text-white overflow-hidden relative group shadow-lg">
+                <div className="absolute -right-8 -bottom-8 opacity-10 group-hover:scale-110 transition-transform duration-700">
+                  <span className="material-symbols-outlined !text-[12rem]">workspace_premium</span>
                 </div>
-                <h4 className="text-lg font-bold mb-2">Team Collaboration</h4>
-                <p className="text-indigo-100 text-xs mb-6">Invite up to 5 members to your workspace with the Team Plan.</p>
-                <button className="bg-white text-indigo-600 px-4 py-2 rounded-full text-xs font-bold hover:bg-indigo-50 transition-colors">Upgrade Now</button>
+                <div className="relative z-10 hidden sm:block mb-8">
+                   <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-md">
+                      <span className="material-symbols-outlined text-white text-2xl">rocket_launch</span>
+                   </div>
+                </div>
+                <h4 className="text-2xl font-bold mb-3 relative z-10 tracking-tight">Team Collaboration</h4>
+                <p className="text-indigo-100 text-sm mb-10 relative z-10 leading-relaxed font-medium">Invite up to 5 members to your workspace with the Team Plan. Share templates, components, and deploy instantly.</p>
+                <button className="bg-white text-indigo-700 px-6 py-3 rounded-full text-sm font-extrabold hover:bg-transparent hover:text-white hover:ring-2 hover:ring-white transition-all w-full md:w-auto relative z-10 shadow-md">Upgrade Now</button>
               </section>
             </aside>
           </div>
