@@ -192,8 +192,10 @@ function BuilderWorkspace() {
         setPublishedUrl(url);
       }
       setStatusText("Published");
-    } catch {
-      setStatusText("Publish failed");
+    } catch (error) {
+      console.error("Publish error:", error);
+      const errorMsg = error?.payload?.detail || error?.message || "Publish failed";
+      setStatusText(`Error: ${errorMsg}`);
     } finally {
       setIsPublishing(false);
     }

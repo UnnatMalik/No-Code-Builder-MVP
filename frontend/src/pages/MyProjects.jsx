@@ -85,8 +85,10 @@ const MyProjects = () => {
       if (result?.public_url) {
         window.open(`${API_BASE_URL}${result.public_url}`, '_blank');
       }
-    } catch {
-      setActionError('Unable to publish project.');
+    } catch (error) {
+      console.error("Publish error:", error);
+      const errorMsg = error?.payload?.detail || error?.message || 'Unable to publish project.';
+      setActionError(errorMsg);
     }
   };
 
