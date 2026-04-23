@@ -8,8 +8,8 @@ from .models import Project
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ["id", "name", "is_published", "created_at"]
-        read_only_fields = ["id", "is_published", "created_at"]
+        fields = ["id", "name", "is_published", "published_path", "created_at"]
+        read_only_fields = ["id", "is_published", "published_path", "created_at"]
 
 
 class LayoutSerializer(serializers.Serializer):

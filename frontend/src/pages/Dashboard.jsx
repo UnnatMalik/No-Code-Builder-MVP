@@ -95,6 +95,7 @@ function BuilderWorkspace() {
   const [statusText, setStatusText] = useState("Syncing...");
   const [isHydrating, setIsHydrating] = useState(true);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [publishedUrl, setPublishedUrl] = useState(null);
   const [isLivePreviewVisible, setIsLivePreviewVisible] = useState(true);
   const lastSavedLayout = useRef("");
 
@@ -180,14 +181,15 @@ function BuilderWorkspace() {
   }, [flatLayoutHash, isHydrating, layout, projectId]);
 
   const handlePublish = async () => {
-    if (!projectId) {
-      return;
-    }
+    if (!projectId) return;
     setIsPublishing(true);
     try {
       const result = await publishProject(projectId);
       if (result?.public_url) {
-        window.open(`${import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000"}${result.public_url}`, "_blank");
+        const url = result.public_url.startsWith("http")
+          ? result.public_url
+          : `${import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000"}${result.public_url}`;
+        setPublishedUrl(url);
       }
       setStatusText("Published");
     } catch {
@@ -283,6 +285,42 @@ function BuilderWorkspace() {
           </div>
         </DndContext>
       </div>
+
+      {publishedUrl && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
+            <h2 className="mb-1 text-lg font-bold text-slate-800">🎉 Site Published!</h2>
+            <p className="mb-4 text-sm text-slate-500">Your site is live at:</p>
+            <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+              <span className="flex-1 truncate text-sm text-violet-700">{publishedUrl}</span>
+              <button
+                className="shrink-0 rounded-md bg-violet-600 px-3 py-1 text-xs font-semibold text-white hover:bg-violet-700"
+                onClick={() => navigator.clipboard.writeText(publishedUrl)}
+                type="button"
+              >
+                Copy
+              </button>
+            </div>
+            <div className="mt-4 flex gap-2">
+              <a
+                className="flex-1 rounded-md bg-violet-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-violet-700"
+                href={publishedUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Open Site
+              </a>
+              <button
+                className="flex-1 rounded-md border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                onClick={() => setPublishedUrl(null)}
+                type="button"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
