@@ -7,12 +7,21 @@ from .generator import render_document
 
 
 def _publish_to_gcs(project_id, html):
+    import json
     from google.cloud import storage
+    from google.oauth2 import service_account
 
     bucket_name = os.getenv("GCS_BUCKET_NAME")
     blob_path = f"sites/{project_id}/index.html"
 
-    client = storage.Client()
+    creds_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+    if creds_json:
+        info = json.loads(creds_json)
+        credentials = service_account.Credentials.from_service_account_info(info)
+        client = storage.Client(credentials=credentials)
+    else:
+        client = storage.Client()
+
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(blob_path)
     blob.upload_from_string(html, content_type="text/html")
