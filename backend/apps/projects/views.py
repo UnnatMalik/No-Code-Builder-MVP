@@ -39,6 +39,15 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"], url_path="publish")
     def publish(self, request, pk=None):
-        project = self.get_object()
-        result = publish_project(project)
-        return Response(result, status=status.HTTP_200_OK)
+        try:
+            project = self.get_object()
+            result = publish_project(project)
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Publish error for project {pk}: {str(e)}", exc_info=True)
+            return Response(
+                {"detail": f"Publishing failed: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
