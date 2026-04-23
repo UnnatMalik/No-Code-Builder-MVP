@@ -16,6 +16,7 @@ import MyProjects from './pages/MyProjects';
 import Templates from './pages/Templates';
 import PublishedSites from './pages/PublishedSites';
 import Settings from './pages/Settings';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function LandingPage() {
   return (
@@ -39,11 +40,12 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/projects" element={<MyProjects />} />
-        <Route path="/templates" element={<Templates />} />
-        <Route path="/published" element={<PublishedSites />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/projects" element={<ProtectedRoute><MyProjects /></ProtectedRoute>} />
+        <Route path="/templates" element={<ProtectedRoute><Templates /></ProtectedRoute>} />
+        <Route path="/published" element={<ProtectedRoute><PublishedSites /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       </Routes>
     </div>
   );

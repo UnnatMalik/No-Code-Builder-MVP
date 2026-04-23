@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', path: '/dashboard' },
@@ -11,9 +12,15 @@ const navItems = [
 
 const Sidebar = ({ activePage }) => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
+    logout();
     navigate('/login');
+  };
+
+  const handleCreateProject = () => {
+    navigate('/projects');
   };
 
   return (
@@ -54,7 +61,7 @@ const Sidebar = ({ activePage }) => {
       </nav>
       {/* CTA */}
       <div className="mt-4 space-y-2">
-        <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-headline text-sm font-bold shadow-lg hover:shadow-indigo-500/20 transition-all transform hover:scale-[1.02] active:scale-95">
+        <button onClick={handleCreateProject} className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full font-headline text-sm font-bold shadow-lg hover:shadow-indigo-500/20 transition-all transform hover:scale-[1.02] active:scale-95">
           <span className="material-symbols-outlined">add_circle</span>
           <span>Create New Project</span>
         </button>

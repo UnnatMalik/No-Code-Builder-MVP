@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -7,16 +8,26 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { register, isLoading } = useAuth();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
-    // Simulate signup for frontend demo
-    if (username && email && password.length >= 6) {
-      // successful signup imitation
+
+    try {
+      await register({ username, email, password });
       navigate('/dashboard');
-    } else {
-      setError('Please fill in all fields and ensure password is at least 6 characters.');
+    } catch (err) {
+      if (err?.payload) {
+        const firstFieldError = Object.values(err.payload)[0];
+        if (Array.isArray(firstFieldError) && firstFieldError.length > 0) {
+          setError(firstFieldError[0]);
+        } else {
+          setError('Unable to register with provided details.');
+        }
+      } else {
+        setError('Unable to register with provided details.');
+      }
     }
   };
 
@@ -83,9 +94,10 @@ const Signup = () => {
 
             <button
               type="submit"
+              disabled={isLoading}
               className="w-full bg-gradient-to-r from-primary to-secondary text-on-primary py-4 rounded-xl font-bold text-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-transform"
             >
-              Sign Up Free
+              {isLoading ? 'Creating Account...' : 'Sign Up Free'}
             </button>
           </form>
 

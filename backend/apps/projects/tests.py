@@ -91,6 +91,51 @@ class ProjectApiTests(APITestCase):
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
         self.assertEqual(get_response.data["layout"]["type"], "container")
 
+    def test_layout_endpoint_accepts_extended_builder_types(self):
+        self._authenticate("owner1")
+
+        payload = {
+            "layout": {
+                "type": "container",
+                "children": [
+                    {
+                        "type": "navbar",
+                        "children": [
+                            {
+                                "type": "row",
+                                "children": [
+                                    {
+                                        "type": "column",
+                                        "children": [
+                                            {
+                                                "type": "card",
+                                                "children": [
+                                                    {
+                                                        "type": "image",
+                                                        "props": {"src": "https://example.com/hero.png"},
+                                                    },
+                                                    {"type": "button", "content": "Get Started"},
+                                                ],
+                                            }
+                                        ],
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                    {"type": "footer", "children": [{"type": "text", "content": "Footer"}]},
+                ],
+            }
+        }
+
+        response = self.client.put(
+            reverse("project-layout", args=[self.project.id]),
+            payload,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["layout"]["children"][0]["type"], "navbar")
+
     def test_publish_creates_output_file(self):
         self._authenticate("owner1")
         self.project.layout = {
@@ -114,3 +159,52 @@ class ProjectApiTests(APITestCase):
             self.assertTrue(output_file.exists())
             html = output_file.read_text(encoding="utf-8")
             self.assertIn("Welcome to My Website", html)
+
+    def test_publish_renders_extended_builder_types(self):
+        self._authenticate("owner1")
+        self.project.layout = {
+            "type": "container",
+            "children": [
+                {
+                    "type": "navbar",
+                    "children": [{"type": "text", "content": "Top Navigation"}],
+                },
+                {
+                    "type": "row",
+                    "children": [
+                        {
+                            "type": "column",
+                            "children": [
+                                {
+                                    "type": "card",
+                                    "children": [
+                                        {"type": "image", "props": {"src": "https://example.com/card.png"}},
+                                        {"type": "button", "content": "Learn More", "props": {"href": "https://example.com"}},
+                                    ],
+                                }
+                            ],
+                        }
+                    ],
+                },
+                {
+                    "type": "footer",
+                    "children": [{"type": "text", "content": "Copyright"}],
+                },
+            ],
+        }
+        self.project.save(update_fields=["layout", "updated_at"])
+
+        temp_media_root = tempfile.mkdtemp()
+        self.addCleanup(lambda: shutil.rmtree(temp_media_root, ignore_errors=True))
+
+        with override_settings(MEDIA_ROOT=temp_media_root):
+            response = self.client.post(reverse("project-publish", args=[self.project.id]), format="json")
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+            output_file = Path(temp_media_root) / "sites" / str(self.project.id) / "index.html"
+            self.assertTrue(output_file.exists())
+            html = output_file.read_text(encoding="utf-8")
+            self.assertIn("<nav", html)
+            self.assertIn("<footer", html)
+            self.assertIn('href="https://example.com"', html)
+            self.assertIn('src="https://example.com/card.png"', html)

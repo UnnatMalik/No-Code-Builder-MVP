@@ -86,3 +86,45 @@ export async function refreshAccessToken(refreshToken) {
 export async function getProjects() {
   return request("/api/projects/");
 }
+
+export async function getProject(projectId) {
+  return request(`/api/projects/${projectId}/`);
+}
+
+export async function createProject(payload) {
+  return request("/api/projects/", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateProject(projectId, payload) {
+  return request(`/api/projects/${projectId}/`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteProject(projectId) {
+  return request(`/api/projects/${projectId}/`, {
+    method: "DELETE",
+  });
+}
+
+export async function getProjectLayout(projectId) {
+  return request(`/api/projects/${projectId}/layout/`);
+}
+
+export async function updateProjectLayout(projectId, layout) {
+  return request(`/api/projects/${projectId}/layout/`, {
+    method: "PUT",
+    body: JSON.stringify({ layout }),
+  });
+}
+
+export async function publishProject(projectId) {
+  return request(`/api/projects/${projectId}/publish/`, {
+    method: "POST",
+  });
+}
+

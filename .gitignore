@@ -38,3 +38,4 @@ Thumbs.db
 # Spec files
 backend_execution_plan.md
 no_code_builder_backend_spec_django_drf.md
+no_code_builder_frontend_implementation_spec_copilot_ready.md
