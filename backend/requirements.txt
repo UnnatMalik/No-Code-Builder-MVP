@@ -7,8 +7,6 @@ whitenoise>=6.6,<7.0
 python-dotenv>=1.0,<2.0
 psycopg2-binary>=2.9,<3.0
 mysqlclient>=2.2,<3.0
-<<<<<<< HEAD
 google-cloud-storage>=2.16,<3.0
-=======
 gunicorn>=21.0,<22.0
->>>>>>> 5a70a5ffd1991df363117e163231f662813aa6dd
+
